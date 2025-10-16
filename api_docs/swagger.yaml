@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: CI3 Reimbursement API
+  version: "1.0.0"
+  description: API for reimbursement system (Auth + Reimbursement)
+servers:
+  - url: "{{base_url}}"
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: ci_session
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    Reimbursement:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+          format: float
+        category_id:
+          type: integer
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        submitted_at:
+          type: string
+          format: date-time
+        approved_at:
+          type: string
+          format: date-time
+paths:
+  /login:
+    post:
+      summary: Login user (returns session cookie)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success
+  /logout:
+    post:
+      summary: Logout user
+      responses:
+        '200':
+          description: Success
+  /reimbursements/submit:
+    post:
+      summary: Submit reimbursement (employee)
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                amount:
+                  type: number
+                category_id:
+                  type: integer
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Submitted
+        '422':
+          description: Validation error
+  /reimbursements/my:
+    get:
+      summary: List reimbursements for current user (employee)
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: OK
+  /reimbursements/all:
+    get:
+      summary: List all reimbursements (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: show_deleted
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+  /reimbursements/{id}/status:
+    post:
+      summary: Change reimbursement status (manager/admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [approved, rejected]
+      responses:
+        '200':
+          description: OK
+  /reimbursements/{id}:
+    delete:
+      summary: Soft delete reimbursement (employee or admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted

@@ -1,0 +1,179 @@
+{
+  "info": {
+    "name": "CI3 Reimbursement API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "admin@example.com"
+            },
+            {
+              "key": "password",
+              "value": "admin123"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit Reimbursement",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "Taxi to client",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "value": "50000",
+              "type": "text"
+            },
+            {
+              "key": "category_id",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/reimbursements/submit",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "reimbursements",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "My Reimbursements",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/reimbursements/my",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "reimbursements",
+            "my"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "All Reimbursements (admin)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/reimbursements/all",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "reimbursements",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change Status",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "status",
+              "value": "approved"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/reimbursements/1/status",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "reimbursements",
+            "1",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Reimbursement",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/reimbursements/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "reimbursements",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost"
+    }
+  ]
+}
